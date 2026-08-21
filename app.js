@@ -385,6 +385,24 @@ async function toggleAudioRecord() {
   }
 }
 
+
+function updateScrollDownBtn() {
+  const btn = document.getElementById('btn-scroll-down');
+  const body = document.querySelector('.editor-body');
+  if (!btn || !body) return;
+  const editorOpen = !document.getElementById('editor').classList.contains('hidden');
+  if (!editorOpen) { btn.classList.add('hidden'); return; }
+  const canScroll = body.scrollHeight > body.clientHeight + 40;
+  const nearBottom = body.scrollTop + body.clientHeight >= body.scrollHeight - 60;
+  btn.classList.toggle('hidden', !canScroll || nearBottom);
+}
+function scrollEditorDown() {
+  const body = document.querySelector('.editor-body');
+  if (!body) return;
+  body.scrollBy({ top: Math.max(200, body.clientHeight * 0.75), behavior: 'smooth' });
+  setTimeout(updateScrollDownBtn, 300);
+}
+
 function openEditor(note = null, asChecklist = false) {
   currentNote = note ? { ...note } : null;
   isChecklistMode = note ? !!note.isChecklist : asChecklist;
@@ -392,6 +410,7 @@ function openEditor(note = null, asChecklist = false) {
   draftAudios = note && note.audios ? note.audios.map(a => ({...a})) : [];
   noteFontSize = (note && note.fontSize) ? note.fontSize : 15;
   setTimeout(applyNoteFontSize, 0);
+  setTimeout(updateScrollDownBtn, 100);
 
   const editor = document.getElementById('editor');
   const titleInput = document.getElementById('note-title');
@@ -543,6 +562,8 @@ async function closeEditor(save = true) {
 
   document.getElementById('editor').classList.add('hidden');
   document.getElementById('app').classList.remove('hidden');
+  const sdb = document.getElementById('btn-scroll-down');
+  if (sdb) sdb.classList.add('hidden');
   currentNote = null;
 }
 
@@ -724,6 +745,11 @@ function setupEvents() {
   const nfd = document.getElementById('btn-note-font-dec');
   if (nfi) nfi.onclick = incNoteFont;
   if (nfd) nfd.onclick = decNoteFont;
+  const sdb = document.getElementById('btn-scroll-down');
+  if (sdb) sdb.onclick = scrollEditorDown;
+  const eb = document.querySelector('.editor-body');
+  if (eb) eb.addEventListener('scroll', updateScrollDownBtn, { passive: true });
+
 
   window.addEventListener('popstate', () => {
     if (!document.getElementById('editor').classList.contains('hidden')) {

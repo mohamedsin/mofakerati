@@ -1,4 +1,4 @@
-const CACHE_NAME = 'mofakrati-v9';
+const CACHE_NAME = 'mofakrati-v10';
 const ASSETS = [
   './',
   './index.html',

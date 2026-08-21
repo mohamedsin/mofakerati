@@ -371,3 +371,16 @@ body { display: flex; flex-direction: column; }
 #note-content, #checklist-area {
   font-size: 15px;
 }
+
+.scroll-down-btn {
+  position: fixed; left: 16px; bottom: 72px; z-index: 220;
+  width: 44px; height: 44px; border-radius: 50%;
+  border: 1px solid var(--border); background: var(--surface);
+  box-shadow: var(--shadow); font-size: 20px; color: var(--text);
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+}
+.editor-body, .notes-grid {
+  touch-action: pan-y;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+}
