@@ -176,8 +176,12 @@ body { display: flex; flex-direction: column; }
 }
 .editor-actions { display: flex; gap: 2px; }
 .editor-body {
-  flex: 1; overflow-y: auto; padding: 8px 20px 24px;
+  flex: 1; overflow-y: auto; padding: 8px 16px 12px;
   -webkit-overflow-scrolling: touch;
+  display: flex; flex-direction: column; min-height: 0;
+}
+#note-content-area {
+  flex: 1; display: flex; flex-direction: column; min-height: 200px;
 }
 #note-title {
   width: 100%; border: none; background: transparent;
@@ -187,8 +191,9 @@ body { display: flex; flex-direction: column; }
 #note-title::placeholder { color: var(--text-secondary); opacity: 0.7; }
 #note-content {
   width: 100%; border: none; background: transparent;
-  font-size: 16px; color: var(--text); outline: none;
-  resize: none; min-height: 180px; line-height: 1.5; font-family: inherit;
+  font-size: 15px; color: var(--text); outline: none;
+  resize: none; min-height: 50vh; height: 100%;
+  line-height: 1.55; font-family: inherit; flex: 1;
 }
 #note-content::placeholder { color: var(--text-secondary); opacity: 0.7; }
 
@@ -311,8 +316,9 @@ body { display: flex; flex-direction: column; }
   font-size: 16px; cursor: pointer; padding: 4px;
 }
 .editor-toolbar {
-  display: flex; gap: 8px; padding: 8px 16px 12px;
+  display: flex; gap: 8px; padding: 6px 12px 10px;
   border-top: 1px solid var(--border); background: var(--surface);
+  flex-shrink: 0;
 }
 .tool-btn {
   border: 1px solid var(--border); background: var(--search-bg);
@@ -349,8 +355,9 @@ body { display: flex; flex-direction: column; }
 #font-size-label { min-width: 64px; text-align: center; font-size: 14px; color: var(--text); }
 
 .note-font-row {
-  display: flex; align-items: center; gap: 10px;
-  margin-bottom: 10px; font-size: 13px; color: var(--text-secondary);
+  display: flex; align-items: center; gap: 8px;
+  margin-bottom: 6px; font-size: 12px; color: var(--text-secondary);
+  flex-shrink: 0;
 }
 .note-font-row .font-btn {
   width: 36px; height: 36px; border-radius: 50%;
