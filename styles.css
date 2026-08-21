@@ -347,3 +347,20 @@ body { display: flex; flex-direction: column; }
   font-family: inherit; cursor: pointer;
 }
 #font-size-label { min-width: 64px; text-align: center; font-size: 14px; color: var(--text); }
+
+.note-font-row {
+  display: flex; align-items: center; gap: 10px;
+  margin-bottom: 10px; font-size: 13px; color: var(--text-secondary);
+}
+.note-font-row .font-btn {
+  width: 36px; height: 36px; border-radius: 50%;
+  border: 1px solid var(--border); background: var(--search-bg);
+  font-size: 14px; font-weight: 700; color: var(--text);
+  font-family: inherit; cursor: pointer;
+}
+#note-font-label {
+  min-width: 28px; text-align: center; font-size: 14px; color: var(--text); font-weight: 600;
+}
+#note-content, #checklist-area {
+  font-size: 15px;
+}

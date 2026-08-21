@@ -17,10 +17,7 @@ let searchQuery = '';
 let labels = []; // قائمة التصنيفات
 let activeLabel = ''; // '' = الكل
 const LABELS_KEY = 'mofakrati_labels';
-const FONT_KEY = 'mofakrati_font_scale';
-const FONT_STEPS = [0.9, 1, 1.15, 1.3, 1.5];
-const FONT_NAMES = ['صغير', 'عادي', 'كبير', 'أكبر', 'ضخم'];
-let fontScaleIdx = 1;
+let noteFontSize = 15;
 
 let draftImages = []; // base64 images while editing
 let draftAudios = []; // {id, dataUrl, name} while editing
@@ -118,24 +115,23 @@ function sortNotes(list) {
 
 // ---------- Labels ----------
 
-function applyFontScale() {
-  const scale = FONT_STEPS[fontScaleIdx] || 1;
-  document.documentElement.style.setProperty('--font-scale', scale);
-  document.body.style.fontSize = (16 * scale) + 'px';
-  const label = document.getElementById('font-size-label');
-  if (label) label.textContent = FONT_NAMES[fontScaleIdx] || 'عادي';
-  localStorage.setItem(FONT_KEY, String(fontScaleIdx));
+function applyNoteFontSize() {
+  const ta = document.getElementById('note-content');
+  const cl = document.getElementById('checklist-area');
+  const lab = document.getElementById('note-font-label');
+  if (ta) ta.style.fontSize = noteFontSize + 'px';
+  if (cl) cl.style.fontSize = noteFontSize + 'px';
+  if (lab) lab.textContent = String(noteFontSize);
 }
-function loadFontScale() {
-  const v = parseInt(localStorage.getItem(FONT_KEY) || '1', 10);
-  fontScaleIdx = isNaN(v) ? 1 : Math.min(FONT_STEPS.length - 1, Math.max(0, v));
-  applyFontScale();
+function incNoteFont() {
+  noteFontSize += 2;
+  if (noteFontSize > 40) noteFontSize = 40;
+  applyNoteFontSize();
 }
-function incFont() {
-  if (fontScaleIdx < FONT_STEPS.length - 1) { fontScaleIdx++; applyFontScale(); }
-}
-function decFont() {
-  if (fontScaleIdx > 0) { fontScaleIdx--; applyFontScale(); }
+function decNoteFont() {
+  noteFontSize -= 2;
+  if (noteFontSize < 13) noteFontSize = 13;
+  applyNoteFontSize();
 }
 
 function loadLabels() {
@@ -270,7 +266,7 @@ function renderNotes() {
       }
       html += '</div>';
     } else if (note.content) {
-      html += `<div class="note-body">${escapeHtml(note.content)}</div>`;
+      html += `<div class="note-body" style="font-size:${note.fontSize||15}px">${escapeHtml(note.content)}</div>`;
     }
 
     card.innerHTML = html;
@@ -394,6 +390,8 @@ function openEditor(note = null, asChecklist = false) {
   isChecklistMode = note ? !!note.isChecklist : asChecklist;
   draftImages = note && note.images ? [...note.images] : [];
   draftAudios = note && note.audios ? note.audios.map(a => ({...a})) : [];
+  noteFontSize = (note && note.fontSize) ? note.fontSize : 15;
+  setTimeout(applyNoteFontSize, 0);
 
   const editor = document.getElementById('editor');
   const titleInput = document.getElementById('note-title');
@@ -531,6 +529,7 @@ async function closeEditor(save = true) {
         label: label || '',
         images: [...draftImages],
         audios: draftAudios.map(a => ({...a})),
+        fontSize: noteFontSize,
         createdAt: currentNote ? currentNote.createdAt : now,
         updatedAt: now
       };
@@ -721,10 +720,10 @@ function setupEvents() {
   document.getElementById('btn-import').onclick = importBackup;
   const btnLabels = document.getElementById('btn-manage-labels');
   if (btnLabels) btnLabels.onclick = manageLabels;
-  const fi = document.getElementById('btn-font-inc');
-  const fd = document.getElementById('btn-font-dec');
-  if (fi) fi.onclick = incFont;
-  if (fd) fd.onclick = decFont;
+  const nfi = document.getElementById('btn-note-font-inc');
+  const nfd = document.getElementById('btn-note-font-dec');
+  if (nfi) nfi.onclick = incNoteFont;
+  if (nfd) nfd.onclick = decNoteFont;
 
   window.addEventListener('popstate', () => {
     if (!document.getElementById('editor').classList.contains('hidden')) {
@@ -746,7 +745,6 @@ async function init() {
     await openDB();
     notes = await getAllNotes();
     loadLabels();
-    loadFontScale();
     setupColorPicker();
     setupEvents();
     renderLabelsBar();
