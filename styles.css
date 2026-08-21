@@ -332,3 +332,18 @@ body { display: flex; flex-direction: column; }
 .note-card .card-audio-badge {
   font-size: 12px; opacity: 0.75; margin-bottom: 4px;
 }
+
+.drawer-section {
+  padding: 16px 24px 6px; font-size: 12px; color: var(--text-secondary); font-weight: 600;
+}
+.font-size-row {
+  display: flex; align-items: center; justify-content: center; gap: 16px;
+  padding: 8px 24px 16px;
+}
+.font-btn {
+  width: 44px; height: 44px; border-radius: 50%;
+  border: 1px solid var(--border); background: var(--search-bg);
+  font-size: 16px; font-weight: 700; color: var(--text);
+  font-family: inherit; cursor: pointer;
+}
+#font-size-label { min-width: 64px; text-align: center; font-size: 14px; color: var(--text); }

@@ -17,6 +17,11 @@ let searchQuery = '';
 let labels = []; // قائمة التصنيفات
 let activeLabel = ''; // '' = الكل
 const LABELS_KEY = 'mofakrati_labels';
+const FONT_KEY = 'mofakrati_font_scale';
+const FONT_STEPS = [0.9, 1, 1.15, 1.3, 1.5];
+const FONT_NAMES = ['صغير', 'عادي', 'كبير', 'أكبر', 'ضخم'];
+let fontScaleIdx = 1;
+
 let draftImages = []; // base64 images while editing
 let draftAudios = []; // {id, dataUrl, name} while editing
 let mediaRecorder = null;
@@ -112,6 +117,27 @@ function sortNotes(list) {
 }
 
 // ---------- Labels ----------
+
+function applyFontScale() {
+  const scale = FONT_STEPS[fontScaleIdx] || 1;
+  document.documentElement.style.setProperty('--font-scale', scale);
+  document.body.style.fontSize = (16 * scale) + 'px';
+  const label = document.getElementById('font-size-label');
+  if (label) label.textContent = FONT_NAMES[fontScaleIdx] || 'عادي';
+  localStorage.setItem(FONT_KEY, String(fontScaleIdx));
+}
+function loadFontScale() {
+  const v = parseInt(localStorage.getItem(FONT_KEY) || '1', 10);
+  fontScaleIdx = isNaN(v) ? 1 : Math.min(FONT_STEPS.length - 1, Math.max(0, v));
+  applyFontScale();
+}
+function incFont() {
+  if (fontScaleIdx < FONT_STEPS.length - 1) { fontScaleIdx++; applyFontScale(); }
+}
+function decFont() {
+  if (fontScaleIdx > 0) { fontScaleIdx--; applyFontScale(); }
+}
+
 function loadLabels() {
   try {
     const raw = localStorage.getItem(LABELS_KEY);
@@ -695,6 +721,10 @@ function setupEvents() {
   document.getElementById('btn-import').onclick = importBackup;
   const btnLabels = document.getElementById('btn-manage-labels');
   if (btnLabels) btnLabels.onclick = manageLabels;
+  const fi = document.getElementById('btn-font-inc');
+  const fd = document.getElementById('btn-font-dec');
+  if (fi) fi.onclick = incFont;
+  if (fd) fd.onclick = decFont;
 
   window.addEventListener('popstate', () => {
     if (!document.getElementById('editor').classList.contains('hidden')) {
@@ -716,6 +746,7 @@ async function init() {
     await openDB();
     notes = await getAllNotes();
     loadLabels();
+    loadFontScale();
     setupColorPicker();
     setupEvents();
     renderLabelsBar();
