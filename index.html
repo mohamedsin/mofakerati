@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <meta name="theme-color" content="#ffffff" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="description" content="مفكرتي - ملاحظات محلية خاصة" />
+  <link rel="manifest" href="manifest.json" />
+  <link rel="icon" href="icon.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="icon-192.png" />
+  <title>مفكرتي</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div id="loader">
+    <div class="loader-content">
+      <div class="loader-bulb">💡</div>
+      <div class="loader-text">مفكرتي</div>
+    </div>
+  </div>
+
+  <div id="app" class="hidden">
+    <header class="header">
+      <div class="search-wrap">
+        <button id="btn-menu" class="icon-btn" title="القائمة">☰</button>
+        <input type="text" id="search-input" class="keep-search" placeholder="البحث في الملاحظات" autocomplete="off" />
+        <button id="btn-clear-search" class="icon-btn hidden" title="مسح">✕</button>
+      </div>
+      <div id="labels-bar" class="labels-bar"></div>
+    </header>
+
+    <main id="notes-container" class="notes-grid"></main>
+
+    <div id="empty-state" class="empty-state hidden">
+      <div class="empty-icon">💡</div>
+      <p>الملاحظات التي تضيفها تظهر هنا</p>
+    </div>
+
+    <div class="take-note-bar">
+      <button id="btn-add-note" class="take-note-main">ملاحظة...</button>
+      <button id="btn-add-checklist" class="take-note-icon" title="قائمة">☑</button>
+    </div>
+  </div>
+
+  <div id="editor" class="editor hidden">
+    <header class="editor-header">
+      <button id="btn-back" class="icon-btn">→</button>
+      <div class="editor-actions">
+        <button id="btn-pin" class="icon-btn" title="تثبيت">📌</button>
+        <button id="btn-color" class="icon-btn" title="لون">🎨</button>
+        <button id="btn-delete-note" class="icon-btn" title="حذف">🗑️</button>
+      </div>
+    </header>
+    <div class="editor-body">
+      <input type="text" id="note-title" placeholder="العنوان" />
+      <div class="label-select-row">
+        <span class="label-tag-icon">🏷️</span>
+        <select id="note-label"></select>
+      </div>
+      <div id="note-images" class="media-images"></div>
+      <div id="note-audios" class="media-audios"></div>
+      <div id="note-content-area">
+        <textarea id="note-content" placeholder="ملاحظة..."></textarea>
+      </div>
+      <div id="checklist-area" class="hidden"></div>
+    </div>
+    <div class="editor-toolbar">
+      <button type="button" id="btn-add-image" class="tool-btn" title="صورة">🖼️ صورة</button>
+      <button type="button" id="btn-add-audio" class="tool-btn" title="تسجيل">🎙️ صوت</button>
+      <input type="file" id="input-image" accept="image/*" multiple class="hidden" />
+    </div>
+    <div id="color-picker" class="color-picker hidden">
+      <div class="colors-row" id="colors-row"></div>
+    </div>
+  </div>
+
+  <div id="menu-sheet" class="side-drawer hidden">
+    <div class="drawer-header">
+      <span class="drawer-logo">💡</span>
+      <span class="drawer-title"><b>مفكر</b>تي</span>
+    </div>
+    <button id="btn-export" class="drawer-item">
+      <span>💾</span>
+      <span>نسخة احتياطية</span>
+    </button>
+    <button id="btn-import" class="drawer-item">
+      <span>📥</span>
+      <span>استرجاع نسخة</span>
+    </button>
+    <button id="btn-manage-labels" class="drawer-item">
+      <span>🏷️</span>
+      <span>التصنيفات</span>
+    </button>
+    <div class="drawer-footer">محلي بالكامل · بدون حساب</div>
+  </div>
+  <div id="overlay" class="overlay hidden"></div>
+
+  <div id="toast" class="toast hidden"></div>
+  <script src="app.js"></script>
+</body>
+</html>
